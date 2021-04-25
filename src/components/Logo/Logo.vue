@@ -16,7 +16,7 @@ enum LogoSize {
 
 const DEFAULT_SIZE_PROP_OPTIONS = { default: false, type: Boolean };
 
-@Component
+@Component({ name: 'Logo' })
 export default class Logo extends Vue {
   @Prop(DEFAULT_SIZE_PROP_OPTIONS)
   small!: boolean;

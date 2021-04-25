@@ -18,16 +18,17 @@
     "@xbeat/client-toolkit": "file:../client-toolkit/xbeat-client-toolkit-1.0.0.tgz",
     "@xbeat/toolkit": "file:../toolkit/xbeat-toolkit-1.0.0.tgz",
     "core-js": "^3.6.5",
+    "cropperjs": "^1.5.11",
     "quasar": "^1.0.0",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
-    "vue-cropperjs": "^5.0.0",
     "vue-property-decorator": "^9.1.2"
   },
   "devDependencies": {
     "@apollo/client": "^3.3.13",
     "@commitlint/cli": "^12.0.1",
     "@commitlint/config-conventional": "^12.0.1",
+    "@types/cropperjs": "^1.3.0",
     "@types/vue-cropperjs": "^4.1.1",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",

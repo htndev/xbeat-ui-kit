@@ -24,7 +24,7 @@
 import { isNil, Nullable } from '@xbeat/toolkit';
 import { Vue, Prop, Component, Watch } from 'vue-property-decorator';
 
-@Component
+@Component({ name: 'Avatar' })
 export default class Avatar extends Vue {
   private avatarLoaded = false;
 

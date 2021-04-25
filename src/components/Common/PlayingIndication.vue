@@ -7,7 +7,7 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 
 const ICONS = ['volume_mute', 'volume_down', 'volume_up'];
 
-@Component
+@Component({ name: 'PlayingIndication' })
 export default class PlayingIndication extends Vue {
   private index = 0;
   private icon = ICONS[0];

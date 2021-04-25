@@ -1,58 +1,54 @@
 <template>
   <div class="image-cropper">
-    <vue-cropper :src="file" ref="cropper" :aspect-ratio="aspectRatio" zoomable preview=".preview" />
+    <img ref="img" :src="src" />
     <div class="preview q-mt-md" />
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Prop, Component, Watch } from 'vue-property-decorator';
-import VueCropper from 'vue-cropperjs';
-import eventBus from '@/common/event-bus';
+import { Vue, Prop, Component } from 'vue-property-decorator';
 import 'cropperjs/dist/cropper.css';
-import { isNull, Nullable } from '@xbeat/toolkit';
-import { fileToDataUrl, dataUrlToBlob } from '@xbeat/client-toolkit';
+import { Nullable } from '@xbeat/toolkit';
+import Cropper from 'cropperjs';
+import eventBus from '@/common/event-bus';
+import { dataUrlToBlob } from '@xbeat/client-toolkit';
 
-@Component({ components: { VueCropper } })
+@Component
 export default class ImageCropper extends Vue {
-  $refs!: { cropper: any };
+  $refs!: { cropper: any; img: any };
+
   private file = '';
+  private cropper!: Cropper;
 
   @Prop({ type: Number })
   aspectRatio!: number;
+  @Prop({ type: String })
+  src!: Nullable<string>;
 
-  @Prop({ type: [File, Object] })
-  src!: Nullable<File>;
+  mounted(): void {
+    this.cropper = new Cropper(this.$refs.img, {
+      aspectRatio: this.aspectRatio,
+      preview: '.preview'
+    });
 
-  created(): void {
     eventBus.$on('crop', this.crop);
   }
 
-  @Watch('src', { immediate: true, deep: true })
-  async onSrcChanged(image: File | null): Promise<void> {
-    if (isNull(image)) {
-      return;
-    }
-
-    this.file = await fileToDataUrl(image);
-    this.$refs.cropper.replace(this.file);
-  }
-
   async crop(): Promise<void> {
-    if (!this.$refs.cropper) {
-      return;
-    }
+    const dataUrl = this.cropper.crop().getCroppedCanvas().toDataURL('image/jpeg', 0.5);
 
-    const dataUrl = await this.$refs.cropper?.getCroppedCanvas().toDataURL('image/jpeg', 0.5);
-    const file = await dataUrlToBlob(dataUrl);
-
-    this.$emit('cropped', file);
+    this.$emit('cropped', await dataUrlToBlob(dataUrl));
   }
 }
 </script>
 
 <style lang="less" scoped>
 .image-cropper {
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
   .preview {
     width: 100%;
     height: calc(200px);

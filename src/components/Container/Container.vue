@@ -18,7 +18,7 @@ enum Size {
   Default = 'default'
 }
 
-@Component
+@Component({ name: 'Container' })
 export default class Container extends Vue {
   @Prop({ type: String, default: Size.Default, validator: (v: Size) => [Size.Half, Size.Default].includes(v) })
   size!: Size;

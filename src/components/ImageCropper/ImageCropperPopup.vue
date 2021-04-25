@@ -5,7 +5,7 @@
         <q-card-section class="text-h5">{{ $t('cropper.crop-your-image') }}</q-card-section>
 
         <q-card-section>
-          <image-cropper :src="image" :aspect-ratio="aspectRatio" @cropped="onImageCropped" />
+          <cropper :aspect-ratio="aspectRatio" :src="src" @cropped="onImageCropped" />
         </q-card-section>
 
         <q-card-actions align="right">
@@ -19,11 +19,11 @@
 
 <script lang="ts">
 import { Vue, Prop, Component, PropSync, Watch } from 'vue-property-decorator';
-import ImageCropper from '@/components/ImageCropper/ImageCropper.vue';
+import Cropper from './ImageCropper.vue';
 import eventBus from '@/common/event-bus';
-
-@Component({ components: { ImageCropper } })
+@Component({ components: { Cropper } })
 export default class ImageCropperPopup extends Vue {
+  $refs!: { cropper: HTMLElement };
   showPopup = false;
 
   @PropSync('value', { type: Boolean, default: false })
@@ -32,8 +32,8 @@ export default class ImageCropperPopup extends Vue {
   @Prop({ default: 1, type: Number })
   aspectRatio!: number;
 
-  @Prop({ type: [File, Object] })
-  image!: File;
+  @Prop({ type: String })
+  src!: string;
 
   @Prop({ type: Boolean, default: false })
   loading!: boolean;
