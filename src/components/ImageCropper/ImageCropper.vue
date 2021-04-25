@@ -47,6 +47,7 @@ export default class ImageCropper extends Vue {
   img {
     display: block;
     max-width: 100%;
+    height: 300px;
   }
 
   .preview {
