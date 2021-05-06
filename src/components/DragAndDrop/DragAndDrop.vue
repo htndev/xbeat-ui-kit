@@ -1,7 +1,7 @@
 <template>
   <section
     class="drag-n-drop"
-    :class="{ 'is-dragging': isFilesDragging }"
+    :class="{ 'is-dragging': isFilesDragging, 'no-border': disableBorder }"
     :style="sizeStyle"
     @dragover.prevent
     @drop.prevent="dropped"
@@ -40,6 +40,9 @@ export default class DragAndDrop extends Vue {
   @Prop({ default: '300px', type: String })
   height!: string;
 
+  @Prop({ default: false, type: Boolean })
+  disableBorder!: boolean;
+
   get sizeStyle(): { width: string; height: string } {
     return {
       width: this.width,
@@ -60,8 +63,8 @@ export default class DragAndDrop extends Vue {
   }
 
   dropped(event: DragEvent): void {
-    const files = event.dataTransfer?.files || [];
-    this.$emit('dropped', [this.multiple ? [...files] : files[0]]);
+    const files = event.dataTransfer?.files;
+    this.emit(files);
   }
 
   onClick(): void {
@@ -73,16 +76,19 @@ export default class DragAndDrop extends Vue {
     fileUploader.onchange = async () => {
       const files = fileUploader.files;
 
-      if (!files) {
-        return;
-      }
-
+      this.emit(files);
       fileUploader.remove();
-
-      this.$emit('dropped', this.multiple ? [...files] : files[0]);
     };
 
     fileUploader.click();
+  }
+
+  emit(files: FileList | null | undefined): void {
+    if (!files) {
+      return;
+    }
+
+    this.$emit('dropped', this.multiple ? [...files] : files[0]);
   }
 }
 </script>
@@ -98,8 +104,16 @@ export default class DragAndDrop extends Vue {
   cursor: pointer;
   position: relative;
 
+  &__text {
+    text-align: center;
+  }
+
   &.is-dragging {
     border-style: dotted;
+  }
+
+  &.no-border {
+    border: none;
   }
 }
 </style>
